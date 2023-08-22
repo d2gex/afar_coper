@@ -1,6 +1,9 @@
 import pandas as pd
 from numpy import array_equal
 from typing import List, Optional
+from pydap.client import open_url
+
+open_url()
 
 
 def fetch_sequence(df: pd.DataFrame, from_row: int, seq_len: int,
@@ -43,7 +46,10 @@ if __name__ == "__main__":
 
     for i in range(num_iterations + 1):
 
-        # TODO: Make a call to open your dataset here
+        # TODO: Make a call to open your dataset here at each iteration so that a new session is created.
+        # By creating a new session, the old one is normally closed as shown by the code of the
+        # setup_session here (this could do the trick however terrible it is):
+        # https://github.com/pydap/pydap/blob/a330c563c2396c98271fda699c07ab05b7a472b3/src/pydap/cas/get_cookies.py#L14
         # Example: SSH20_22_daily = copernicusmarine_datastore(DATASET_ID, USERNAME, PASSWORD)
         # Example: SSH20_22_daily = xr.open_dataset(SSH20_22_daily)
 
@@ -68,8 +74,6 @@ if __name__ == "__main__":
             # TODO: Store your result dataframe with result.to_csv here just in case the whole thing crash.
             # There will be ever only one file as you are appending the results.
 
-        # TODO: close the session of your dataset here: xarray.backends.PydapDataStore.close ==> in your code
-        # data_store.close()?
 
     # Irrelevant for your script. Just remove it as this is only a test
     assert len(result_df) == len(test_df)
