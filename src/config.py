@@ -1,3 +1,5 @@
+import logging
+import sys
 import os
 import tomli
 from pathlib import Path
@@ -20,4 +22,14 @@ OUTPUT_FILENAME = config['output_filename']
 COPERNICUS_USERNAME = os.getenv('COPERNICUS_USERNAME')
 COPERNICUS_PASSWORD = os.getenv('COPERNICUS_PASSWORD')
 
-
+# Log to the output and into a file
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+fh = logging.FileHandler(ROOT_PATH / 'motu_calls.log')
+sh = logging.StreamHandler(sys.stdout)
+formatter = logging.Formatter('[%(asctime)s] %(levelname)s [%(filename)s.%(funcName)s:%(lineno)d] %(message)s',
+                              datefmt='%a, %d %b %Y %H:%M:%S')
+fh.setFormatter(formatter)
+sh.setFormatter(formatter)
+logger.addHandler(fh)
+logger.addHandler(sh)

@@ -1,10 +1,12 @@
 import logging
 import pandas as pd
 import xarray as xr
-from src import config
 from src.motu_options import MotuOptions
 from src.motu_payload import MotuPayloadGenerator
 from motu_utils import motu_api
+from src import config
+
+logger = logging.getLogger()
 
 if __name__ == "__main__":
     input_data = pd.read_csv(config.DATA_PATH / config.INPUT_FILENAME)
@@ -12,15 +14,19 @@ if __name__ == "__main__":
         'motu': config.BASE_URL,
         "auth_mode": 'cas',
         'out_dir': str(config.NC_PATH),
-        'user': config.COMPERNICUS_USERNAME,
-        'pwd': config.COMPERNICUS_PASSWORD
+        'user': config.COPERNICUS_USERNAME,
+        'pwd': config.COPERNICUS_PASSWORD
     }
     payload_generators = MotuPayloadGenerator(input_data, common_payload, config.INPUT_FILENAME)
     motu_payloads = payload_generators.run()
-    for paylod in motu_payloads:
-        print("")
-        motu_api.execute_request(MotuOptions(motu_payloads))
-        print("")
+
+    for _id, payload_data in motu_payloads.items():
+        logger.info(
+            f"------> Processing area  for ID = {_id} delimited by ({payload_data['longitude_min']},{payload_data['latitude_min']}) and "
+            f"({payload_data['longitude_max']},{payload_data['latitude_max']})")
+        # motu_api.execute_request(MotuOptions(motu_payloads))
+        print("do something")
+        logger.info("-------> END")
 #
 #
 # product_details = {
