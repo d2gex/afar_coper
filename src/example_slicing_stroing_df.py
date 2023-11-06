@@ -74,11 +74,10 @@ if __name__ == "__main__":
             # TODO: Store your result dataframe with result.to_csv here just in case the whole thing crash.
             # There will be ever only one file as you are appending the results.
 
-
     # Irrelevant for your script. Just remove it as this is only a test
     assert len(result_df) == len(test_df)
     assert array_equal(result_df[fetched_var_name].values, test_df.b.values)
 
     # Lastly, attach the column in your result dataframe to your existing one
     test_df = test_df.assign(whatever_name=result_df[fetched_var_name].values)
-    assert array_equal(result_df[fetched_var_name].values, test_df.whatever_name.values) # remove this line
+    assert array_equal(result_df[fetched_var_name].values, test_df.whatever_name.values)  # remove this line
