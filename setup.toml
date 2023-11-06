@@ -1,5 +1,5 @@
 base_url = "http://my.cmems-du.eu/motu-web/Motu"
-input_file = "api_parameters.csv"
+input_filename = "api_parameters.csv"
 output_filename = "result.nc"
 service_id = "GLOBAL_MULTIYEAR_PHY_001_030-TDS"
 product_id = "cmems_mod_glo_phy_my_0.083_P1D-m"
