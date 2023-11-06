@@ -15,7 +15,8 @@ with open(ROOT_PATH / 'setup.toml', mode="rb") as fp:
     config = tomli.load(fp)
 
 BASE_URL = config['base_url']
-INPUT_FILE = config['input_file']
+INPUT_FILENAME = config['input_file']
+OUTPUT_FILENAME = config['output_file']
 COMPERNICUS_USERNAME = os.getenv('COMPERNICUS_USERNAME')
 COMPERNICUS_PASSWORD = os.getenv('COMPERNICUS_PASSWORD')
 
