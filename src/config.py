@@ -23,8 +23,8 @@ COPERNICUS_PASSWORD = os.getenv('COPERNICUS_PASSWORD')
 
 # Log to the output and into a file
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-fh = logging.FileHandler(ROOT_PATH / 'motu_calls.log')
+logger.setLevel(logging.INFO)
+fh = logging.FileHandler(ROOT_PATH / 'motu_calls.log', mode='w')
 sh = logging.StreamHandler(sys.stdout)
 formatter = logging.Formatter('[%(asctime)s] %(levelname)s [%(filename)s.%(funcName)s:%(lineno)d] %(message)s',
                               datefmt='%a, %d %b %Y %H:%M:%S')
