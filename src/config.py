@@ -14,11 +14,10 @@ NC_PATH = OUTPUT_PATH / 'nc'
 
 dot_env = load_dotenv(ROOT_PATH / '.env')
 with open(ROOT_PATH / 'setup.toml', mode="rb") as fp:
-    config = tomli.load(fp)
+    settings = tomli.load(fp)
 
-BASE_URL = config['base_url']
-INPUT_FILENAME = config['input_filename']
-OUTPUT_FILENAME = config['output_filename']
+INPUT_FILENAME = settings['input_filename']
+OUTPUT_FILENAME = settings['output_filename']
 COPERNICUS_USERNAME = os.getenv('COPERNICUS_USERNAME')
 COPERNICUS_PASSWORD = os.getenv('COPERNICUS_PASSWORD')
 

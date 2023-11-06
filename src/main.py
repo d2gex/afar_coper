@@ -11,11 +11,14 @@ logger = logging.getLogger()
 if __name__ == "__main__":
     input_data = pd.read_csv(config.DATA_PATH / config.INPUT_FILENAME)
     common_payload = {
-        'motu': config.BASE_URL,
+        'motu': config.settings['base_url'],
         "auth_mode": 'cas',
         'out_dir': str(config.NC_PATH),
         'user': config.COPERNICUS_USERNAME,
-        'pwd': config.COPERNICUS_PASSWORD
+        'pwd': config.COPERNICUS_PASSWORD,
+        'service_id': config.settings['service_id'],
+        'product_id': config.settings['product_id'],
+        'variable': config.settings['variables']
     }
     payload_generators = MotuPayloadGenerator(input_data, common_payload, config.INPUT_FILENAME)
     motu_payloads = payload_generators.run()
@@ -24,8 +27,7 @@ if __name__ == "__main__":
         logger.info(
             f"------> Processing area  for ID = {_id} delimited by ({payload_data['longitude_min']},{payload_data['latitude_min']}) and "
             f"({payload_data['longitude_max']},{payload_data['latitude_max']})")
-        # motu_api.execute_request(MotuOptions(motu_payloads))
-        print("do something")
+        motu_api.execute_request(MotuOptions(payload_data))
         logger.info("-------> END")
 #
 #

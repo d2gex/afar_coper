@@ -20,9 +20,9 @@ class MotuPayloadGenerator:
             'longitude_max': row["longitude_max"],
             'depth_min': row["depth_min"],
             'depth_max': row["depth_max"],
-            'out_name': f"f{tokens[0]}_{row['ID']}.{tokens[-1]}",
-            'date_min': datetime.strptime(row["date_min"], '%d/%m/%Y %H:%M'),
-            'date_max': datetime.strptime(row["date_max"], '%d/%m/%Y %H:%M'),
+            'out_name': f"{tokens[0]}_{row['ID']}.{tokens[-1]}",
+            'date_min': datetime.strptime(row["date_min"], '%d/%m/%Y %H:%M:%S'),
+            'date_max': datetime.strptime(row["date_max"], '%d/%m/%Y %H:%M:%S'),
         }
         product_details.update(self.payload)
         return product_details
