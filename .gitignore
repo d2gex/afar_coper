@@ -138,5 +138,5 @@ ui-tests/.pnp.*
 
 .idea
 .env
-log
+.log
 data
