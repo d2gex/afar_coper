@@ -1,8 +1,8 @@
 import logging
 import pandas as pd
-import xarray as xr
 from src.motu_options import MotuOptions
 from src.motu_payload import MotuPayloadGenerator
+from src.nc_to_csv import NcToCsv
 from motu_utils import motu_api
 from src import config
 
@@ -31,12 +31,5 @@ if __name__ == "__main__":
         motu_api.execute_request(MotuOptions(payload_data))
         logger.info("-------> END")
 
-    #
-# # L3 product details: large image of Spanish Mediterrenean
-# logging.basicConfig(level=logging.DEBUG)
-# motu_payload.update(product_details)
-# motu_api.execute_request(MotuOptions(motu_payload))
-#
-# ds = xr.open_dataset(config.DATA_PATH / 'result.nc')
-# df = ds.to_dataframe()
-# df.to_csv(config.DATA_PATH / 'result.csv')
+    # Convert all nc files to csv
+    (NcToCsv(config.NC_PATH, config.CSV_PATH))()
