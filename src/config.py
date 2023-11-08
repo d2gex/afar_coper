@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 file_path = Path(__file__).resolve()
 ROOT_PATH = file_path.parents[1]
-DATA_PATH = ROOT_PATH / 'data'
+DATA_PATH = ROOT_PATH / '.data'
 OUTPUT_PATH = DATA_PATH / 'output'
 CSV_PATH = OUTPUT_PATH / 'csv'
 NC_PATH = OUTPUT_PATH / 'nc'

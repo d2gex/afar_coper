@@ -1,0 +1,5 @@
+motuclient==1.8.4
+pandas==2.1.2
+python-dotenv==1.0.0
+tomli==2.0.1
+xarray==2023.10.1

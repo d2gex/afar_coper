@@ -23,7 +23,7 @@ if __name__ == "__main__":
     payload_generators = MotuPayloadGenerator(input_data, common_payload, config.OUTPUT_FILENAME)
     motu_payloads = payload_generators.run()
 
-    # Fetch data from Coperniculs in .nc format
+    # Fetch .data from Coperniculs in .nc format
     for _id, payload_data in motu_payloads.items():
         logger.info(
             f"------> Processing area  for ID = {_id} delimited by ({payload_data['longitude_min']},{payload_data['latitude_min']}) and "
