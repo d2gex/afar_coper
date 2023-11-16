@@ -1,3 +1,5 @@
+import logging
+import sys
 import os
 import tomli
 from pathlib import Path
@@ -5,19 +7,28 @@ from dotenv import load_dotenv
 
 file_path = Path(__file__).resolve()
 ROOT_PATH = file_path.parents[1]
-DATA_PATH = ROOT_PATH / 'data'
+DATA_PATH = ROOT_PATH / '.data'
 OUTPUT_PATH = DATA_PATH / 'output'
 CSV_PATH = OUTPUT_PATH / 'csv'
 NC_PATH = OUTPUT_PATH / 'nc'
 
 dot_env = load_dotenv(ROOT_PATH / '.env')
 with open(ROOT_PATH / 'setup.toml', mode="rb") as fp:
-    config = tomli.load(fp)
+    settings = tomli.load(fp)
 
-BASE_URL = config['base_url']
-INPUT_FILENAME = config['input_file']
-OUTPUT_FILENAME = config['output_file']
-COMPERNICUS_USERNAME = os.getenv('COMPERNICUS_USERNAME')
-COMPERNICUS_PASSWORD = os.getenv('COMPERNICUS_PASSWORD')
+INPUT_FILENAME = settings['input_filename']
+OUTPUT_FILENAME = settings['output_filename']
+COPERNICUS_USERNAME = os.getenv('COPERNICUS_USERNAME')
+COPERNICUS_PASSWORD = os.getenv('COPERNICUS_PASSWORD')
 
-
+# Log to the output and into a file
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+fh = logging.FileHandler(ROOT_PATH / 'motu_calls.log', mode='w')
+sh = logging.StreamHandler(sys.stdout)
+formatter = logging.Formatter('[%(asctime)s] %(levelname)s [%(filename)s.%(funcName)s:%(lineno)d] %(message)s',
+                              datefmt='%a, %d %b %Y %H:%M:%S')
+fh.setFormatter(formatter)
+sh.setFormatter(formatter)
+logger.addHandler(fh)
+logger.addHandler(sh)

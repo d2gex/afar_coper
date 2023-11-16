@@ -1,10 +1,11 @@
 import pandas as pd
 from typing import Dict, Any
+from datetime import datetime
 
 
 class MotuPayloadGenerator:
 
-    def __int__(self, data: pd.DataFrame, payload: Dict[str, Any], output_filename: str):
+    def __init__(self, data: pd.DataFrame, payload: Dict[str, Any], output_filename: str):
         self.data = data
         self.payload = payload
         self.output_filename = output_filename
@@ -19,12 +20,12 @@ class MotuPayloadGenerator:
             'longitude_max': row["longitude_max"],
             'depth_min': row["depth_min"],
             'depth_max': row["depth_max"],
-            'out_name': f"f{tokens[0]}_{row['ID']}.{tokens[-1]}",
-            'date_min': row["date_min"],
-            'date_max': row["date_max"],
+            'out_name': f"{row['ID']}_{tokens[0]}.{tokens[-1]}",
+            'date_min': (datetime.strptime(row['date_min'], '%d/%m/%Y %H:%M:%S')).strftime('%Y-%m-%d %H:%M:%S'),
+            'date_max': (datetime.strptime(row['date_max'], '%d/%m/%Y %H:%M:%S')).strftime('%Y-%m-%d %H:%M:%S'),
         }
         product_details.update(self.payload)
         return product_details
 
     def run(self):
-        return [{row['ID']: self._process_row(row)} for _, row in self.data.iterrows()]
+        return {row['ID']: self._process_row(row) for _, row in self.data.iterrows()}
