@@ -6,7 +6,9 @@ class CsvProcessor:
     def __init__(self, data: pd.DataFrame):
         self.data = data
 
-    def __call__(self, *args, **kwargs):
+    def run(self):
+        if 'ID' not in self.data.columns:
+            self.data = self.data.assign(ID=[x for x in range(1, len(self.data) + 1)])
         self.data = self.data.assign(year=self.data['time'].dt.year)
         years = sorted(set(self.data.year))
         return {
