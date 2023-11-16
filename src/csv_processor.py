@@ -8,8 +8,8 @@ class CsvProcessor:
 
     def __call__(self, *args, **kwargs):
         self.data = self.data.assign(year=self.data['time'].dt.year)
-        years = sorted(self.data.year)
+        years = sorted(set(self.data.year))
         return {
             'years': years,
-            'yearly_data': [self.data[self.data['year'] == year] for year in years]
+            'yearly_data': {year: self.data[self.data['year'] == year] for year in years}
         }
