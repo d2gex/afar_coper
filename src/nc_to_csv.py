@@ -46,4 +46,3 @@ class NcToCsv:
         self._to_csv()
         result = self._amalgamate_csvs()
         self._build_result(result)
-

@@ -2,13 +2,13 @@ import logging
 import pandas as pd
 from src import config
 from src.csv_processor import CsvProcessor
-from src.api_request import ApiRequest
-
+from src.api_request import ApiRequestMonoThread, ApiRequestMultipleThreads
 
 logger = logging.getLogger()
 
 if __name__ == "__main__":
-    input_data = pd.read_csv(config.DATA_PATH / config.INPUT_FILENAME, parse_dates=['time'])
+    input_data = pd.read_csv(config.DATA_PATH / config.INPUT_FILENAME)
+    input_data['time'] = pd.to_datetime(input_data['time'], format='%d/%m/%Y %H:%M')
     common_payload = {
         'motu': config.settings['base_url'],
         "auth_mode": 'cas',
@@ -17,15 +17,14 @@ if __name__ == "__main__":
         'pwd': config.COPERNICUS_PASSWORD,
         'service_id': config.settings['service_id'],
         'product_id': config.settings['product_id'],
-        'variable': config.settings['variables']
+        'variable': config.settings['variables'],
+        'socket_timeout': config.settings['socket_timeout']
     }
     c_processor = CsvProcessor(input_data)
     dfs = c_processor.run()
     data = {2012: dfs['yearly_data'][2012]}
-    a_request = ApiRequest(data, common_payload, config.OUTPUT_FILENAME)
+    a_request = ApiRequestMultipleThreads(data, common_payload, config.OUTPUT_FILENAME)
     a_request.run()
-
-
 
     # input_data = pd.read_csv(config.DATA_PATH / config.INPUT_FILENAME)
     # common_payload = {

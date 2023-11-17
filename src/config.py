@@ -31,4 +31,3 @@ formatter = logging.Formatter('[%(asctime)s] %(levelname)s [%(filename)s.%(funcN
 fh.setFormatter(formatter)
 sh.setFormatter(formatter)
 logger.addHandler(fh)
-logger.addHandler(sh)

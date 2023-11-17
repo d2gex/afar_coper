@@ -1,12 +1,16 @@
 import pandas as pd
 import threading
-from typing import Dict, Any, Optional
+import logging
+import shutil
+from typing import Dict, Any, Optional, List, Tuple
 from pathlib import Path
 from motu_utils import motu_api
 from src import config
 from src.motu_payload import MotuPayloadGenerator
 from src.motu_options import MotuOptions
 from src.nc_to_csv import NcToCsv
+
+logger = logging.getLogger()
 
 
 class ApiRequest:
@@ -22,6 +26,7 @@ class ApiRequest:
     def _create_dest_folder(self) -> Path:
         root_folder = Path(self.common_payload['out_dir'])
         dest_folder = root_folder / str(self.year)
+        shutil.rmtree(dest_folder)
         dest_folder.mkdir(parents=True, exist_ok=True)
         return dest_folder
 
@@ -36,18 +41,15 @@ class ApiRequest:
         for i in range(0, len(items), chunk_size):
             yield items[i:i + chunk_size]
 
-    def _download_mulitple_files_simultaenously(self, data):
-        '''Download multiple files from Copernicus simultaneoulsy
-        '''
+    def _fetch_data(self, data: List[Dict]):
+        pass
 
-        running_threads = []
-        for i in range(len(data)):
-            thread = threading.Thread(target=motu_api.execute_request, args=(MotuOptions(data[i]), ))
-            thread.start()
-            running_threads.append(thread)
-
-        for thread in running_threads:
-            thread.join()
+    def _get_min_max_ids(self, payloads: List[Dict]) -> Tuple:
+        ids = []
+        for payload in payloads:
+            tokens = payload['out_name'].split("-")
+            ids.append(tokens[0])
+        return min(ids), max(ids)
 
     def _download_data(self):
         '''Run number of api calls in batch simultaneously
@@ -55,10 +57,45 @@ class ApiRequest:
         motu_payload_gen = MotuPayloadGenerator(self.data[self.year], self.common_payload, self.output_filename)
         motu_payloads = motu_payload_gen.run()
         for payloads in self._chunkify_list(motu_payloads, self.batch_num_calls):
-            self._download_mulitple_files_simultaenously(payloads)
+            min_id, max_id = self._get_min_max_ids(payloads)
+            message = f"----------------> Downloading batch from {min_id} to {max_id}"
+            logger.info(message)
+            print(message)
+            self._fetch_data(payloads)
+            message = f"----------------> End of barch"
+            logger.info(message)
+            print(message)
 
     def run(self):
         dest_folder = self._create_dest_folder()
         self.common_payload['out_dir'] = str(dest_folder)
         self._download_data()
         self._build_result()
+
+
+class ApiRequestMultipleThreads(ApiRequest):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def _fetch_data(self, data: List[Dict]):
+        '''Download multiple files from Copernicus simultaneously
+                '''
+
+        running_threads = []
+        for i in range(len(data)):
+            thread = threading.Thread(target=motu_api.execute_request, args=(MotuOptions(data[i]),))
+            thread.start()
+            running_threads.append(thread)
+
+        for thread in running_threads:
+            thread.join()
+
+
+class ApiRequestMonoThread(ApiRequest):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def _fetch_data(self, data: List[Dict]):
+        '''Download one single file at the time'''
+        for i in range(len(data)):
+            motu_api.execute_request(MotuOptions(data[i]))
