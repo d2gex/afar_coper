@@ -37,7 +37,7 @@ if __name__ == "__main__":
         print(message)
         logger.info(message)
         a_request = ApiRequestMultipleThreads(data, common_payload, config.OUTPUT_FILENAME, batch_num_calls=200)
-        a_request.run(max_iterations=200)
+        a_request.run()
         message = f"############### End ({year})"
         print(message)
         logger.info(message)

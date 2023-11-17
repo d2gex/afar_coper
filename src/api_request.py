@@ -2,6 +2,7 @@ import pandas as pd
 import threading
 import logging
 import shutil
+import re
 from typing import Dict, Any, Optional, List, Tuple
 from pathlib import Path
 from motu_utils import motu_api
@@ -55,7 +56,11 @@ class ApiRequest:
         ids = []
         for payload in payloads:
             tokens = payload['out_name'].split("-")
-            ids.append(tokens[0])
+            try:
+                _id = re.search(r'\d+', tokens[0]).group()
+            except TypeError:
+                _id = tokens[0]
+            ids.append(int(_id))
         return min(ids), max(ids)
 
     def _download_data(self, max_iterations: Optional[int] = None):
