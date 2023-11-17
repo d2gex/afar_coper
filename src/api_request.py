@@ -23,10 +23,17 @@ class ApiRequest:
         self.year = list(self.data.keys())[0]
         self.batch_num_calls = batch_num_calls
 
+    def _request(self, data: Dict[str, Any]):
+        try:
+            motu_api.execute_request(MotuOptions(data))
+        except Exception as error:
+            print("An exception occurred:", type(error).__name__, "–", error)
+
     def _create_dest_folder(self) -> Path:
         root_folder = Path(self.common_payload['out_dir'])
         dest_folder = root_folder / str(self.year)
-        shutil.rmtree(dest_folder)
+        if dest_folder.exists() and dest_folder.is_dir():
+            shutil.rmtree(dest_folder)
         dest_folder.mkdir(parents=True, exist_ok=True)
         return dest_folder
 
@@ -51,11 +58,12 @@ class ApiRequest:
             ids.append(tokens[0])
         return min(ids), max(ids)
 
-    def _download_data(self):
+    def _download_data(self, max_iterations: Optional[int] = None):
         '''Run number of api calls in batch simultaneously
         '''
         motu_payload_gen = MotuPayloadGenerator(self.data[self.year], self.common_payload, self.output_filename)
         motu_payloads = motu_payload_gen.run()
+        offset = 0
         for payloads in self._chunkify_list(motu_payloads, self.batch_num_calls):
             min_id, max_id = self._get_min_max_ids(payloads)
             message = f"----------------> Downloading batch from {min_id} to {max_id}"
@@ -65,11 +73,14 @@ class ApiRequest:
             message = f"----------------> End of barch"
             logger.info(message)
             print(message)
+            offset += self.batch_num_calls
+            if max_iterations is not None and offset >= max_iterations:
+                break
 
-    def run(self):
+    def run(self, max_iterations: Optional[int] = None):
         dest_folder = self._create_dest_folder()
         self.common_payload['out_dir'] = str(dest_folder)
-        self._download_data()
+        self._download_data(max_iterations=max_iterations)
         self._build_result()
 
 
@@ -83,7 +94,7 @@ class ApiRequestMultipleThreads(ApiRequest):
 
         running_threads = []
         for i in range(len(data)):
-            thread = threading.Thread(target=motu_api.execute_request, args=(MotuOptions(data[i]),))
+            thread = threading.Thread(target=self._request, args=(data[i],))
             thread.start()
             running_threads.append(thread)
 
@@ -98,4 +109,4 @@ class ApiRequestMonoThread(ApiRequest):
     def _fetch_data(self, data: List[Dict]):
         '''Download one single file at the time'''
         for i in range(len(data)):
-            motu_api.execute_request(MotuOptions(data[i]))
+            self._request(data[i])
