@@ -22,7 +22,7 @@ class MotuPayloadGenerator:
             'longitude_max': row["lon"],
             'depth_min': row["depth"],
             'depth_max': row["depth"],
-            'out_name': f"{row['ID']}_{tokens[0]}.{tokens[-1]}",
+            'out_name': f"{row['ID']}-{tokens[0]}.{tokens[-1]}",
             'date_min': row['time'].strftime('%Y-%m-%d %H:%M:%S'),
             'date_max': (row['time'] + timedelta(days=self.days_offset)).strftime('%Y-%m-%d %H:%M:%S'),
         }
