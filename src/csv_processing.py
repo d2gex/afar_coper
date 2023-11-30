@@ -28,7 +28,7 @@ class CsvProcessing:
             'date_max': max(data['time'])
         }
 
-    def get_max_area_per_dates(self) -> Dict[str, Union[float, datetime]]:
+    def get_max_area_per_dates(self) -> Dict[str, Dict]:
         df_by_years = self._split_csv_per_year(self.data)
         data = {}
         for year, df in df_by_years.items():
