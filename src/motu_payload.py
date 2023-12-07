@@ -10,7 +10,7 @@ class MotuPayloadGenerator:
         self.output_filename = output_filename
         self.area_details = []
 
-    def _process_data_dict(self, year: str, data: Dict) -> Dict[str, Any]:
+    def _process_data_dict(self, _date: str, data: Dict) -> Dict[str, Any]:
         tokens = self.output_filename.split(".")
         product_details = {
             'latitude_min': data["latitude_min"],
@@ -19,9 +19,9 @@ class MotuPayloadGenerator:
             'longitude_max': data["longitude_max"],
             'depth_min': data["depth_min"],
             'depth_max': data["depth_max"],
-            'out_name': f"{year}_{tokens[0]}.{tokens[-1]}",
-            'date_min': data['date_min'].strftime('%Y-%m-%d %H:%M:%S'),
-            'date_max': data['date_max'].strftime('%Y-%m-%d %H:%M:%S'),
+            'out_name': f"{_date}_{tokens[0]}.{tokens[-1]}",
+            'date_min': data['date_min'],
+            'date_max': data['date_max'],
         }
         product_details.update(self.payload)
         return product_details
