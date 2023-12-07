@@ -9,7 +9,7 @@ class CsvParameterSplitter:
         self.data = data
 
     def _split_csv_per_day(self, data: pd.DataFrame) -> Dict[str, pd.DataFrame]:
-        return {str(_date.date()): df for _date, df in data.groupby('time')}
+        return {str(_date.strftime('%Y-%m-%d_%H-%M-%S')): df for _date, df in data.groupby('time')}
 
     def _get_max_bounding_box(self, data: pd.DataFrame) -> Dict[str, float]:
         return {
