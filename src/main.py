@@ -49,15 +49,15 @@ if __name__ == "__main__":
     # (4) Fetch the actual data from Copernicus and merge into input parameters
     motu_requester = ApiRequest()
     full_results = pd.DataFrame()
-    for _id, payload_data in motu_payloads.items():
+    for _date, payload_data in motu_payloads.items():
         logger.info(
-            f"------> Processing area  for ID = {_id} delimited by ({payload_data['longitude_min']},{payload_data['latitude_min']}) and "
+            f"------> Processing date = {_date} delimited by ({payload_data['longitude_min']},{payload_data['latitude_min']}) and "
             f"({payload_data['longitude_max']},{payload_data['latitude_max']})")
         ret_api_data = motu_requester.run(payload_data)
         if ret_api_data is None:
             logger.error("No data was returned. See log for further details")
         else:
-            input_data = df_by_dates[_id]
+            input_data = df_by_dates[_date]
             npf = NearestDataframePointFinder(input_data, ret_api_data, var_names=config.settings['variables'])
             partial_results = npf.find_and_merge()
             full_results = pd.concat([full_results, partial_results])
