@@ -44,5 +44,5 @@ class CsvParameterSplitter:
             data[_date] = coords
         return data
 
-    def get_dataframes_split_by_days(self) -> Dict[str, pd.DataFrame]:
+    def get_dataframes_split_by_dates(self) -> Dict[str, pd.DataFrame]:
         return self._split_csv_per_day(self.data)

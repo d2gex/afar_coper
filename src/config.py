@@ -9,8 +9,6 @@ file_path = Path(__file__).resolve()
 ROOT_PATH = file_path.parents[1]
 DATA_PATH = ROOT_PATH / 'data'
 OUTPUT_PATH = DATA_PATH / 'output'
-CSV_PATH = OUTPUT_PATH / 'csv'
-NC_PATH = OUTPUT_PATH / 'nc'
 
 dot_env = load_dotenv(ROOT_PATH / '.env')
 with open(ROOT_PATH / 'setup.toml', mode="rb") as fp:

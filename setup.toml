@@ -2,5 +2,6 @@ base_url = "https://my.cmems-du.eu/motu-web/Motu"
 input_filename = "api_parameters.csv"
 output_filename = "result.nc"
 service_id = "GLOBAL_MULTIYEAR_PHY_001_030-TDS"
-product_id = "cmems_mod_glo_phy_my_0.083_P1D-m"
+product_id = "cmems_mod_glo_phy_my_0.083_P1M-m"
 variables = ["thetao", "zos"]
+distance = "euclidean"
