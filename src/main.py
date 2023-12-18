@@ -30,7 +30,8 @@ if __name__ == "__main__":
     ret_nc_folder = ret_root_folder / 'nc'
     ret_csv_folder = ret_root_folder / 'csv'
 
-    shutil.rmtree(ret_root_folder)
+    if ret_root_folder.exists():
+        shutil.rmtree(ret_root_folder)
     ret_root_folder.mkdir(parents=True, exist_ok=True)
     ret_nc_folder.mkdir(parents=True, exist_ok=True)
     ret_csv_folder.mkdir(parents=True, exist_ok=True)
