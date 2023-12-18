@@ -3,7 +3,7 @@ import pandas as pd
 import time
 import shutil
 from src import config
-from src.motu_payload import CpmtbPayloadGenerator
+from src.payload_generator import CpmtbPayloadGenerator
 from src.csv_parameter_splitter import CsvParameterSplitter
 from src.api_request import ApiRequest
 from src.nearest_point_finder import NearestDataframePointFinder
