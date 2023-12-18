@@ -1,6 +1,7 @@
 import logging
 import pandas as pd
 import time
+import shutil
 from src import config
 from src.motu_payload import CpmtbPayloadGenerator
 from src.csv_parameter_splitter import CsvParameterSplitter
@@ -18,14 +19,18 @@ if __name__ == "__main__":
     input_data['time'] = pd.to_datetime(input_data['time'], format='%d/%m/%Y %H:%M')
 
     # (2) Split inputs into daily records
-    csv_proc = CsvParameterSplitter(input_data)
-    api_params_by_dates = csv_proc.get_max_area_per_dates()
+    csv_proc = CsvParameterSplitter(input_data,
+                                    min_year=config.settings['years'][0],
+                                    max_year=config.settings['years'][-1])
+    api_params_by_dates = csv_proc.get_min_max_boundaries_per_dates()
     df_by_dates = csv_proc.get_dataframes_split_by_dates()
 
     # (3) Create product folder and sub-folders
     ret_root_folder = config.OUTPUT_PATH / config.settings['dataset_id']
     ret_nc_folder = ret_root_folder / 'nc'
     ret_csv_folder = ret_root_folder / 'csv'
+
+    shutil.rmtree(ret_root_folder)
     ret_root_folder.mkdir(parents=True, exist_ok=True)
     ret_nc_folder.mkdir(parents=True, exist_ok=True)
     ret_csv_folder.mkdir(parents=True, exist_ok=True)
