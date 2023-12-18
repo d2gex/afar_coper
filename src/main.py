@@ -2,7 +2,6 @@ import logging
 import pandas as pd
 import time
 from src import config
-from copernicus_marine_client import subset
 from src.motu_payload import CpmtbPayloadGenerator
 from src.csv_parameter_splitter import CsvParameterSplitter
 from src.api_request import ApiRequest
@@ -42,22 +41,21 @@ if __name__ == "__main__":
     motu_payloads = payload_generators.run()
 
     # (4) Fetch the actual data from Copernicus and merge into input parameters
-    motu_requester = ApiRequest()
+    copernicus_request = ApiRequest()
     full_results = pd.DataFrame()
     for _date, payload_data in motu_payloads.items():
         logger.info(
             f"------> Processing date = {_date} delimited by ({payload_data['minimum_longitude']},"
             f"{payload_data['minimum_latitude']}) and "
             f"({payload_data['maximum_longitude']},{payload_data['minimum_latitude']})")
-        subset(**payload_data)
-        # if ret_api_data is None:
-        #     logger.error("No data was returned. See log for further details")
-        # else:
-        #     input_data = df_by_dates[_date]
-        #     npf = NearestDataframePointFinder(input_data, ret_api_data, var_names=config.settings['variables'])
-        #     partial_results = npf.find_and_merge()
-        #     full_results = pd.concat([full_results, partial_results])
-        break
+        ret_api_data = copernicus_request.run(payload_data)
+        if ret_api_data is None:
+            logger.error("No data was returned. See log for further details")
+        else:
+            input_data = df_by_dates[_date]
+            npf = NearestDataframePointFinder(input_data, ret_api_data, var_names=config.settings['variables'])
+            partial_results = npf.find_and_merge()
+            full_results = pd.concat([full_results, partial_results])
         logger.info("-------> END")
     full_results.to_csv(ret_csv_folder / 'results.csv')
 
