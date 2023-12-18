@@ -16,8 +16,6 @@ with open(ROOT_PATH / 'setup.toml', mode="rb") as fp:
 
 INPUT_FILENAME = settings['input_filename']
 OUTPUT_FILENAME = settings['output_filename']
-COPERNICUS_USERNAME = os.getenv('COPERNICUS_USERNAME')
-COPERNICUS_PASSWORD = os.getenv('COPERNICUS_PASSWORD')
 
 # Log to the output and into a file
 logger = logging.getLogger()

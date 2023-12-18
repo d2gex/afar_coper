@@ -1,10 +1,9 @@
 import logging
 import pandas as pd
 import time
-from motu_utils import motu_api
 from src import config
-from src.motu_options import MotuOptions
-from src.motu_payload import MotuPayloadGenerator
+from copernicus_marine_client import subset
+from src.motu_payload import CpmtbPayloadGenerator
 from src.csv_parameter_splitter import CsvParameterSplitter
 from src.api_request import ApiRequest
 from src.nearest_point_finder import NearestDataframePointFinder
@@ -25,7 +24,7 @@ if __name__ == "__main__":
     df_by_dates = csv_proc.get_dataframes_split_by_dates()
 
     # (3) Create product folder and sub-folders
-    ret_root_folder = config.OUTPUT_PATH / config.settings['service_id']
+    ret_root_folder = config.OUTPUT_PATH / config.settings['dataset_id']
     ret_nc_folder = ret_root_folder / 'nc'
     ret_csv_folder = ret_root_folder / 'csv'
     ret_root_folder.mkdir(parents=True, exist_ok=True)
@@ -34,16 +33,12 @@ if __name__ == "__main__":
 
     # (3) Generate all payloads required to fetch the desired data
     common_payload = {
-        'motu': config.settings['base_url'],
-        "auth_mode": 'cas',
-        'out_dir': str(ret_nc_folder),
-        'user': config.COPERNICUS_USERNAME,
-        'pwd': config.COPERNICUS_PASSWORD,
-        'service_id': config.settings['service_id'],
-        'product_id': config.settings['product_id'],
-        'variable': config.settings['variables']
+        'output_directory': str(ret_nc_folder),
+        'dataset_id': config.settings['dataset_id'],
+        'variables': config.settings['variables']
     }
-    payload_generators = MotuPayloadGenerator(api_params_by_dates, common_payload, config.OUTPUT_FILENAME)
+
+    payload_generators = CpmtbPayloadGenerator(api_params_by_dates, common_payload, config.OUTPUT_FILENAME)
     motu_payloads = payload_generators.run()
 
     # (4) Fetch the actual data from Copernicus and merge into input parameters
@@ -51,16 +46,18 @@ if __name__ == "__main__":
     full_results = pd.DataFrame()
     for _date, payload_data in motu_payloads.items():
         logger.info(
-            f"------> Processing date = {_date} delimited by ({payload_data['longitude_min']},{payload_data['latitude_min']}) and "
-            f"({payload_data['longitude_max']},{payload_data['latitude_max']})")
-        ret_api_data = motu_requester.run(payload_data)
-        if ret_api_data is None:
-            logger.error("No data was returned. See log for further details")
-        else:
-            input_data = df_by_dates[_date]
-            npf = NearestDataframePointFinder(input_data, ret_api_data, var_names=config.settings['variables'])
-            partial_results = npf.find_and_merge()
-            full_results = pd.concat([full_results, partial_results])
+            f"------> Processing date = {_date} delimited by ({payload_data['minimum_longitude']},"
+            f"{payload_data['minimum_latitude']}) and "
+            f"({payload_data['maximum_longitude']},{payload_data['minimum_latitude']})")
+        subset(**payload_data)
+        # if ret_api_data is None:
+        #     logger.error("No data was returned. See log for further details")
+        # else:
+        #     input_data = df_by_dates[_date]
+        #     npf = NearestDataframePointFinder(input_data, ret_api_data, var_names=config.settings['variables'])
+        #     partial_results = npf.find_and_merge()
+        #     full_results = pd.concat([full_results, partial_results])
+        break
         logger.info("-------> END")
     full_results.to_csv(ret_csv_folder / 'results.csv')
 
