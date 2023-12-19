@@ -24,7 +24,7 @@ class ApiRequest:
 
     def run(self, api_params: Dict[str, Any]) -> pd.DataFrame:
         is_data = self._request(api_params)
-        if is_data is None:
+        if is_data is False:
             return None
         downloaded_path = Path(api_params['output_directory']) / api_params['output_filename']
         ds = xr.open_dataset(downloaded_path)
