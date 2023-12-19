@@ -7,6 +7,7 @@ from src.payload_generator import CpmtbPayloadGenerator
 from src.csv_parameter_splitter import CsvParameterSplitter
 from src.api_request import ApiRequest
 from src.nearest_point_finder import NearestDataframePointFinder
+from src.nc_to_csv import NcToCsv
 
 logger = logging.getLogger()
 
@@ -30,7 +31,7 @@ if __name__ == "__main__":
     ret_nc_folder = ret_root_folder / 'nc'
     ret_csv_folder = ret_root_folder / 'csv'
 
-    if ret_root_folder.exists():
+    if ret_root_folder.exists() and config.settings['start_mode'] == 0:
         shutil.rmtree(ret_root_folder)
     ret_root_folder.mkdir(parents=True, exist_ok=True)
     ret_nc_folder.mkdir(parents=True, exist_ok=True)
@@ -46,9 +47,15 @@ if __name__ == "__main__":
     payload_generators = CpmtbPayloadGenerator(api_params_by_dates, common_payload, config.OUTPUT_FILENAME)
     motu_payloads = payload_generators.run()
 
-    # (4) Fetch the actual data from Copernicus and merge into input parameters
+    # (4) Do we need start where left the last time?
     copernicus_request = ApiRequest()
-    full_results = pd.DataFrame()
+    if config.settings['start_mode'] == 0:
+        full_results = pd.DataFrame()
+    else:
+        nc_to_csv_converter = NcToCsv()
+        full_results = nc_to_csv_converter.read_and_merge(ret_nc_folder)
+
+    # (5) Fetch the actual data from Copernicus and merge into input parameters
     for _date, payload_data in motu_payloads.items():
         logger.info(
             f"------> Processing date = {_date} delimited by ({payload_data['minimum_longitude']},"
