@@ -5,7 +5,7 @@ import shutil
 from src import config
 from src.payload_generator import CpmtbPayloadGenerator
 from src.csv_parameter_splitter import CsvParameterSplitter
-from src.api_request import ApiRequest
+from src.api_request import DataRequest
 from src.nearest_point_finder import NearestDataframePointFinder
 from src.nc_to_csv import NcToCsv
 
@@ -48,8 +48,9 @@ if __name__ == "__main__":
     motu_payloads = payload_generators.run()
 
     # (4) Do we need start where left the last time?
-    copernicus_request = ApiRequest()
-    if config.settings['start_mode'] == 0:
+    data_request = DataRequest()
+    start_mode = config.settings['start_mode']
+    if start_mode != 1:
         full_results = pd.DataFrame()
     else:
         nc_to_csv_converter = NcToCsv()
@@ -61,7 +62,8 @@ if __name__ == "__main__":
             f"------> Processing date = {_date} delimited by ({payload_data['minimum_longitude']},"
             f"{payload_data['minimum_latitude']}) and "
             f"({payload_data['maximum_longitude']},{payload_data['minimum_latitude']})")
-        ret_api_data = copernicus_request.run(payload_data)
+        ret_api_data = data_request.fetch_from_net(
+            payload_data) if start_mode != 2 else data_request.fetch_from_disk(payload_data)
         if ret_api_data is None:
             logger.error("No data was returned. See log for further details")
         else:
@@ -70,7 +72,7 @@ if __name__ == "__main__":
             partial_results = npf.find_and_merge()
             full_results = pd.concat([full_results, partial_results])
         logger.info("-------> END")
-    full_results.to_csv(ret_csv_folder / config.settings['dataset_id'] / '.csv')
+    full_results.to_csv(ret_csv_folder / f"{config.settings['dataset_id']}.csv")
 
     end_time = time.time()
     execution_time = start_time - end_time
