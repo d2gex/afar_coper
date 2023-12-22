@@ -70,7 +70,7 @@ if __name__ == "__main__":
             partial_results = npf.find_and_merge()
             full_results = pd.concat([full_results, partial_results])
         logger.info("-------> END")
-    full_results.to_csv(ret_csv_folder / 'results.csv')
+    full_results.to_csv(ret_csv_folder / config.settings['dataset_id'] / '.csv')
 
     end_time = time.time()
     execution_time = start_time - end_time
