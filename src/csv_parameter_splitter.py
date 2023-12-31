@@ -1,14 +1,16 @@
 import pandas as pd
-from typing import Dict, Union
+from typing import Dict, Union, List, Optional
 from datetime import datetime, timedelta
 
 
 class CsvParameterSplitter:
 
-    def __init__(self, data: pd.DataFrame, min_year: int, max_year: int):
+    def __init__(self, data: pd.DataFrame, min_year: int, max_year: int,
+                 time_offset: Optional[List[Union[int, float]]] = None):
         self.data = data
         self.min_year = min_year
         self.max_year = max_year
+        self.time_offset = time_offset
 
     def _cap_data_frame_by_min_max_date(self, data: pd.DataFrame) -> pd.DataFrame:
         _data = data.copy()
@@ -30,7 +32,8 @@ class CsvParameterSplitter:
 
     def _get_min_max_date(self, data: pd.DataFrame) -> Dict[str, datetime]:
         start_date = (set(data.time)).pop()
-        end_date = start_date + timedelta(hours=23, minutes=59, seconds=59)
+        days, hours, minutes, seconds = self.time_offset
+        end_date = start_date + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
         return {
             'date_min': start_date.strftime('%Y-%m-%d %H:%M:%S'),
             'date_max': end_date.strftime('%Y-%m-%d %H:%M:%S')

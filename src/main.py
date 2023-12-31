@@ -22,7 +22,8 @@ if __name__ == "__main__":
     # (2) Split inputs into daily records
     csv_proc = CsvParameterSplitter(input_data,
                                     min_year=config.settings['years'][0],
-                                    max_year=config.settings['years'][-1])
+                                    max_year=config.settings['years'][-1],
+                                    time_offset=config.settings['time_offset'])
     api_params_by_dates = csv_proc.get_min_max_boundaries_per_dates()
     df_by_dates = csv_proc.get_dataframes_split_by_dates()
 
