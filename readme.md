@@ -23,11 +23,11 @@ This wrapper uses solely the `subset` functionality of the Copernicus Marine Too
 <a id="installation"></a>
 # 2. Installation
 
-First you need to install **Python >=3.9 and < 3.12** as required by Copernicus Marine Toolbox. You will also need to
-install **pip**. You need to download the version of your choice from https://www.python.org/downloads/ and then follow the instructions on https://docs.python.org/3/using/index.html.
-Details for Windows, Mac and *nix users are provided in the appropriate sections.
+Firstly you need to install **Python >=3.9 and < 3.12** as required by Copernicus Marine Toolbox and **pip**.  To do 
+so download the Python version of your choice from https://www.python.org/downloads/ and then follow the instructions 
+on https://docs.python.org/3/using/index.html. Details for Windows, Mac and *nix users are provided in the appropriate sections.
 
-Second you need to download the source code from Github either by downloading  the zip directly from the web on https://github.com/d2gex/copernicus-subset-wrapper.git as
+Secondly you need to download the source code from Github either by downloading  the zip directly from the web on https://github.com/d2gex/copernicus-subset-wrapper.git as
 shown in the figure below ...
 
 <img src="images/github_zip_dowload.png">
@@ -39,9 +39,9 @@ shown in the figure below ...
    git clone https://github.com/d2gex/copernicus-subset-wrapper.git .
 ```
 
-Third you need to install the dependencies. If you do not want to install them system-wide which is highly recommended not do so, you
-can create a virtual environment as described on [Python Virtual Environments and Packages](https://docs.python.org/3/tutorial/venv.html).
-A quick tutorial for virtual environment creations is shown below:
+Thirdly you need to install the project dependencies. If you do not want to install them system-wide, which is highly 
+recommended not do so, you can create a virtual environment as described on [Python Virtual Environments and Packages](https://docs.python.org/3/tutorial/venv.html).
+A quick tutorial for the virtual environment creation is shown below:
 
 ```
    python3 -m venv <<your_virtualenv_folder>>
