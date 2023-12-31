@@ -34,7 +34,7 @@ shown in the figure below ...
 
 ... Or just git-cloning to your preferred location, ensuring that the destination folder is empty:
 
-```
+```bash
    cd <<your_source_folder>>
    git clone https://github.com/d2gex/copernicus-subset-wrapper.git .
 ```
@@ -43,14 +43,14 @@ Thirdly you need to install the project dependencies. If you do not want to inst
 recommended not do so, you can create a virtual environment as described on [Python Virtual Environments and Packages](https://docs.python.org/3/tutorial/venv.html).
 A quick tutorial for the virtual environment creation is shown below:
 
-```
+```bash
    python3 -m venv <<your_virtualenv_folder>>
    source /path/to/your_virtualenv_folder/bin/activate
 ```
 
 Lastly, all that is left now is to install all requirements at once as follows:
 
-```
+```bash
    pip install -r /path/to/your_source_folder/requirements.txt
 ```
 The file **requirements.txt** contain all libraries that are necessary for this wrapper to run.
@@ -58,7 +58,34 @@ The file **requirements.txt** contain all libraries that are necessary for this 
 
 <a id="quickstart"></a>
 # 3. Quickstart
+In a hurry? Follows the three quick steps below:
 
+## 3.1 Configure your *setup.toml* file
+```yaml
+input_filename = "api_parameters.csv" # name of the file holding the input parameters
+output_filename = "result.nc" # suffix added to the name of each individual file fetched per input row
+dataset_id = "cmems_mod_glo_phy_my_0.083deg_P1M-m" # data set identifier
+variables = ["thetao", "zos"] # variables wanting to be fetched
+years = [2012, 2020] #  date interval of interest
+# distance method used to calculate the nearest point.
+# See alternatives on https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cdist.html
+distance = "euclidean"
+# [days, hours, minutes, seconds] time added to each start_time - per row - in days, hours, minutes and seconds
+time_offset = [0, 23, 59, 59]
+start_mode = 0  # 0 start afresh, 1 resume from given years interval and 2 read only from disk
+```
+
+## 3.2 Run the wrapper
+
+```bash
+   cd your_source_folder
+   python -m src.main
+```
+## 3.3 Look out for your data
+
+After the data has been downloaded look for the resulting file in  `your_source_folder/data/<<dataset identifier>>/csv/<<dataset identifier>>.csv`
+
+All done!
 <a id="configuration"></a>
 # 4. Configuration
 
