@@ -60,7 +60,15 @@ The file **requirements.txt** contain all libraries that are necessary for this 
 # 3. Quickstart
 In a hurry? Follows the three quick steps below:
 
-## 3.1 Configure your *setup.toml* file
+## 3.1 Ensure the inputs are in the correct format
+
+<img src="images/api_parameters_input_sample.png">
+
+In a nutshell, columns `lat`, `long`, `time` and `depth` must be named as such and `time` must be in `%d/%m/%Y %H:%M`. 
+The coordinate system is **WGS 84 EPSG: 4326**. There must be a column in the spreadsheet identifying each row uniquely,
+
+## 3.2 Configure your *setup.toml* file
+
 ```yaml
 input_filename = "api_parameters.csv" # name of the file holding the input parameters
 output_filename = "result.nc" # suffix added to the name of each individual file fetched per input row
@@ -75,13 +83,12 @@ time_offset = [0, 23, 59, 59]
 start_mode = 0  # 0 start afresh, 1 resume from given years interval and 2 read only from disk
 ```
 
-## 3.2 Run the wrapper
+## 3.3 Run the wrapper
 
 ```bash
    cd your_source_folder
    python -m src.main
 ```
-## 3.3 Look out for your data
 
 After the data has been downloaded look for the resulting file in  `your_source_folder/data/<<dataset identifier>>/csv/<<dataset identifier>>.csv`
 
