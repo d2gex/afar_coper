@@ -11,12 +11,12 @@ need to deal with programming. It has been developed in Python 3.9 and makes cal
 
 The main advantages over the [toolbox's console client](https://help.marine.copernicus.eu/en/collections/5820990-command-line-interface-cli) are as follows:
 
-1. The inputted data is processed by single unique dates, meaning that rows which dates are the same are processed together 
+1. The input data is processed by single unique dates, meaning that rows which dates are the same are processed together 
    by calculating the widest area that embeds all given coordinates for that day. This avoids reducing the number of calls
    or the generation of massive files should the whole set be requested at once.
 2. Only one single csv file is generated.
 3. Although the data fetched is by area and date, the script will find the point in the downloaded dataset closest to the coordinates 
-   given in each row, meaning that the final generated csv file has got the same number of rows as the inputted file.
+   given in each row of the input file, meaning that the final generated csv file has got the same number of rows as the input file.
 4. All Individual and original downloaded files are kept intact - **.nc format** - so that they can be post-processed in whichever way 
    you consider appropriate, should you need to do so in the forthcoming future.
 
