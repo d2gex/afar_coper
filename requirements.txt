@@ -1,3 +1,4 @@
+lxml==4.9.2
 copernicus_marine_client==0.10.3
 numpy==1.20.2
 pandas==2.1.4
