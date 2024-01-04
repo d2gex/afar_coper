@@ -66,6 +66,7 @@ In a hurry? Follows the three quick steps below:
 
 In a nutshell, columns `lat`, `long`, `time` and `depth` must be named as such and `time` must be in `%d/%m/%Y %H:%M`. 
 The coordinate system is **WGS 84 EPSG: 4326**. There must be a column in the spreadsheet identifying each row uniquely,
+although its name is down to you. In the example above it is called "ID_Gil".
 
 ## 3.2 Configure your *setup.toml* file
 
