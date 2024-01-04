@@ -102,7 +102,7 @@ although its name is down to you. In the example above it is called `ID_Gil`.
 
 ## 3.4 Look for the results
 
-After the data has been downloaded look for the resulting csv file in  *'<<your_source_folder>>/data/<<dataset_identifier>>/csv/<<dataset_identifier>>/.csv'*.
-The wrapper will also place each downloaded `*.nc` files in *'<<your_source_folder>>/data/<<dataset_identifier>>/nc/'*.
+After the data has been downloaded look for the resulting csv file in  '<<your_source_folder>>/**data**/<<dataset_identifier>>/**csv**/<<dataset_identifier>>/.csv'.
+The wrapper will also place each downloaded `*.nc` files in '<<your_source_folder>>/**data**/<<dataset_identifier>>/**nc**/'.
 
 
