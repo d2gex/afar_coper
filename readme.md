@@ -1,7 +1,8 @@
  # Table of content:
- - [Introduction](#introduction)
- - [Installation](#installation)
- - [Running](#running)
+ - [1. Introduction](#introduction)
+ - [2. Installation](#installation)
+ - [3. Login to Copernicus](#login_to_copernicus)
+ - [4. Running](#running)
 
 
 <a id="introduction"></a>
@@ -58,10 +59,25 @@ Lastly, all that is left now is to install all requirements at once as follows:
 The file **requirements.txt** contains all libraries that are necessary for this wrapper to run.
 
 
-<a id="running"></a>
-# 3. Running
+<a id="login_to_copernicus"></a>
+# 3. Loging to Copernicus
+If you have not yet registered with Copernicus you need first to do so [here](https://data.marine.copernicus.eu/register).
+Then you need to run the `login` function from Copernicus API one-off for your credentials to be generated. Subsequent calls
+to the wrapper will know where you credentials are stored and pick them as needed. To call login you need to run the following
+on the console:
 
-## 3.1 Configure your *setup.toml* file
+```bash
+  copernicus-marine login
+```
+You will be asked for the username and password you used earlier on in the registration process. Upon providing it, a message
+saying that the credentials have been generated and the location where they are should be prompted to you. You are now
+ready to use the wrapper without worrying in the future about credentials or whatsoever.
+
+
+<a id="running"></a>
+# 4. Running
+
+## 4.1 Configure your *setup.toml* file
 
 The `setup.toml` file is the configuration file used by the wrapper and contains information about the products and
 variables you are trying to download. It is placed within *<<your_source_folder>>* and its options have been explained
@@ -82,7 +98,7 @@ time_offset = [0, 23, 59, 59]
 start_mode = 0  # 0 start afresh, 1 resume from given years interval and 2 read only from disk
 ```
 
-## 3.2 Ensure input file is in the correct format
+## 4.2 Ensure input file is in the correct format
 The wrapper will read a csv file within `data` folder in '<<your_source_folder>>' provided by the variable 
 `input_filename` in your configuration file. An example is shown below:
 
@@ -93,14 +109,14 @@ In a nutshell, columns `lat`, `lon`, `time` and `depth` must be named as such an
 The coordinate system is **WGS 84 EPSG: 4326**. There must be a column in the spreadsheet identifying each row uniquely,
 although its name is down to you. In the example above it is called `ID_Gil`.
 
-## 3.3 Run the wrapper
+## 4.3 Run the wrapper
 
 ```bash
    cd your_source_folder
    python -m src.main
 ```
 
-## 3.4 Look for the results
+## 4.4 Look for the results
 
 After the data has been downloaded look for the resulting csv file in  '<<your_source_folder>>/**data**/<<dataset_identifier>>/**csv**/<<dataset_identifier>>.csv'.
 The wrapper will also place each downloaded `*.nc` files in '<<your_source_folder>>/**data**/<<dataset_identifier>>/**nc**/'.
