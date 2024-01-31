@@ -140,3 +140,5 @@ ui-tests/.pnp.*
 .env
 *.log
 data
+
+.quick_test.py
