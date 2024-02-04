@@ -5,7 +5,7 @@ import shutil
 from src import config
 from src.payload_generator import CpmtbPayloadGenerator
 from src.csv_parameter_splitter import CsvParameterSplitter
-from data_processor import DataGrabberAndProcessor
+from src.data_processor import DataGrabberAndProcessor
 
 logger = logging.getLogger()
 
