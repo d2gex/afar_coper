@@ -25,5 +25,5 @@ class CpmtbPayloadGenerator:
         product_details.update(self.payload)
         return product_details
 
-    def run(self):
+    def run(self) -> Dict[str, Dict]:
         return {_date: self._process_data_dict(_date, data) for _date, data in self.data.items()}
