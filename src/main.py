@@ -5,10 +5,7 @@ import shutil
 from src import config
 from src.payload_generator import CpmtbPayloadGenerator
 from src.csv_parameter_splitter import CsvParameterSplitter
-from src.api_request import DataRequest
-from src.nearest_point_finder import NearestDataframePointFinder
-from src.nc_to_csv import NcToCsv
-from data_processor import DataProcessor
+from data_processor import DataGrabberAndProcessor
 
 logger = logging.getLogger()
 
@@ -50,44 +47,23 @@ if __name__ == "__main__":
     payloads = payload_generators.run()
     start_mode = config.settings['start_mode']
     params = {
+        'input_by_dates': df_by_dates,
+        'variables': config.settings['variables'],
         'nc_folder': ret_nc_folder,
         'csv_folder': ret_csv_folder,
-        'payloads': payloads
+        'payloads': payloads,
     }
     if start_mode == 1:
         year_sequence = [x for x in range(config.settings['years'][0], config.settings['years'][-1] + 1)]
         params.update({'years_to_remove': year_sequence})
 
+    processor = DataGrabberAndProcessor(**params)
     # Fetch all data first ...
-    processor = DataProcessor(**params)
     processor.fetch_all_data()
-
-    # (4) Do we need start where left the last time?
-    # data_request = DataRequest()
-    # start_mode = config.settings['start_mode']
-    # if start_mode != 1:
-    #     full_results = pd.DataFrame()
-    # else:
-    #     nc_to_csv_converter = NcToCsv()
-    #     full_results = nc_to_csv_converter.read_and_merge(ret_nc_folder)
-
-    # # (5) Fetch the actual data from Copernicus and merge into input parameters
-    # for _date, payload_data in motu_payloads.items():
-    #     logger.info(
-    #         f"------> Processing date = {_date} delimited by ({payload_data['minimum_longitude']},"
-    #         f"{payload_data['minimum_latitude']}) and "
-    #         f"({payload_data['maximum_longitude']},{payload_data['minimum_latitude']})")
-    #     ret_api_data = data_request.fetch_from_net(
-    #         payload_data) if start_mode != 2 else data_request.fetch_from_disk(payload_data)
-    #     if ret_api_data is None:
-    #         logger.error("No data was returned. See log for further details")
-    #     else:
-    #         input_data = df_by_dates[_date]
-    #         npf = NearestDataframePointFinder(input_data, ret_api_data, var_names=config.settings['variables'])
-    #         partial_results = npf.find_and_merge()
-    #         full_results = pd.concat([full_results, partial_results])
-    #     logger.info("-------> END")
-    # full_results.to_csv(ret_csv_folder / f"{config.settings['dataset_id']}.csv")
+    # ... The process it ...
+    data = processor.process_all_data()
+    # ... And finfally store it.
+    data.to_csv(ret_csv_folder / f"{config.settings['dataset_id']}.csv")
 
     end_time = time.time()
     execution_time = start_time - end_time
