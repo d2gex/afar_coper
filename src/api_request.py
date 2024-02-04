@@ -3,7 +3,7 @@ import pandas as pd
 import xarray as xr
 from typing import Dict, Any
 from pathlib import Path
-from copernicus_marine_client import subset
+from copernicusmarine import subset
 
 logger = logging.getLogger()
 
