@@ -5,7 +5,7 @@ import shutil
 from src import config
 from src.payload_generator import CpmtbPayloadGenerator
 from src.csv_parameter_splitter import CsvParameterSplitter
-from src.data_processor import DataGrabberAndProcessor
+from src.data_grabber_processor import DataGrabberAndProcessor
 
 logger = logging.getLogger()
 
@@ -55,11 +55,12 @@ if __name__ == "__main__":
     }
     if start_mode == 1:
         year_sequence = [x for x in range(config.settings['years'][0], config.settings['years'][-1] + 1)]
-        params.update({'years_to_remove': year_sequence})
+        params.update({'pattern_to_remove': year_sequence})
 
     processor = DataGrabberAndProcessor(**params)
-    # Fetch all data first ...
-    processor.fetch_all_data()
+    # Fetch all data first if we do not have them yet in the hard disk
+    if start_mode != 2:
+        processor.fetch_all_data()
     # ... The process it ...
     data = processor.process_all_data()
     # ... And finfally store it.

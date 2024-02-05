@@ -1,6 +1,6 @@
 input_filename = "api_parameters.csv" # name of the file holding the input parameters
 output_filename = "result.nc" # suffix added to the name of each individual file fetched per input row
-dataset_id = "cmems_mod_glo_phy_my_0.083deg_P1M-m" # data set identifier
+dataset_id = "cmems_mod_glo_phy_my_0.083deg_P1D-m" # data set identifier
 variables = ["thetao", "zos"] # variables wanting to be fetched
 years = [2012, 2020] #  date interval of interest
 # distance method used to calculate the nearest point.
@@ -8,4 +8,4 @@ years = [2012, 2020] #  date interval of interest
 distance = "euclidean"
 # [days, hours, minutes, seconds] time added to each start_time - per row - in days, hours, minutes and seconds
 time_offset = [0, 23, 59, 59]
-start_mode = 0  # 0 start afresh, 1 resume from given years interval and 2 read only from disk
+start_mode = 2  # 0 start afresh, 1 resume from given years interval and 2 read only from disk (processing only)

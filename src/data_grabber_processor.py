@@ -12,28 +12,28 @@ class DataGrabberAndProcessor:
 
     def __init__(self, input_by_dates: pd.DataFrame, variables: List[str], nc_folder: Path, csv_folder: Path,
                  payloads: Dict[str, Dict],
-                 years_to_remove: Optional[List[int]] = None):
+                 pattern_to_remove: Optional[List[int]] = None):
         self.input_by_dates = input_by_dates
         self.variables = variables
         self.nc_folder = nc_folder
         self.csv_folder = csv_folder
         self.payloads = payloads
-        self.years_to_remove = years_to_remove
+        self.pattern_to_remove = pattern_to_remove
         self.data_request = DataRequest()
 
-    def _delete_year_files(self):
-        for year in self.years_to_remove:
-            paths_to_delete = list(Path(self.nc_folder).glob(f"{year}*.nc"))
+    def _delete_pattern_files(self):
+        for pattern in self.pattern_to_remove:
+            paths_to_delete = list(Path(self.nc_folder).glob(f"{pattern}*.nc"))
             if paths_to_delete:
-                logger.warning(f"Deleting all previously downloaded files for year {year}")
+                logger.warning(f"Deleting all previously downloaded files for year {pattern}")
                 for p in paths_to_delete:
                     p.unlink()
 
     def fetch_all_data(self):
 
         # Delete all file from within the given yearly interval if given so
-        if self.years_to_remove is not None:
-            self._delete_year_files()
+        if self.pattern_to_remove is not None:
+            self._delete_pattern_files()
 
         for _date, payload_data in self.payloads.items():
             logger.info(
@@ -59,6 +59,11 @@ class DataGrabberAndProcessor:
             else:
                 input_data = self.input_by_dates[_date]
                 npf = NearestDataframePointFinder(input_data, ret_api_data, var_names=self.variables)
-                partial_results = npf.find_and_merge()
-                full_results = pd.concat([full_results, partial_results])
+                try:
+                    partial_results = npf.find_and_merge()
+                except KeyError:
+                    logger.exception(f"File{Path(payload_data['output_directory']) / payload_data['output_filename']} "
+                                     f"did not have the expected structure")
+                else:
+                    full_results = pd.concat([full_results, partial_results])
         return full_results
