@@ -11,10 +11,10 @@
 This is a wrapper to help you download data from [Copernicus servers](https://marine.copernicus.eu/register-copernicus-marine-service?mtm_campaign=Copernicus-Souscription&mtm_medium=cpc&mtm_source=google&mtm_content=text&mtm_cid=145762311002&mtm_kwd=copernicus%20marine%20data&gad_source=1&gclid=CjwKCAiAnL-sBhBnEiwAJRGigvyODuGJ__Aa1pjKNB8H7VvH_lrn3Fu-CJdZO1T_g-ChP95GC8fxFRoCLZsQAvD_BwE) via a configuration file, eliminating therefore the
 needs to deal with programming. It has been developed in Python 3.9 and makes calls to the recently released [Copernicus Marine Toolbox's python API](https://help.marine.copernicus.eu/en/collections/5821001-python-library-api) - as per December 2023.
 
-In a nutshell, this script will look for a csv file with rows having latitude, longitude depth and the specific dates you 
-want each requested row to be downloaded at. It will also look for a configuration file - `setup.toml` file to find 
-what products and variables you are after. Then it will enquire Copernicus service for such details and generate a
-csv output of the exact same dimension as your input, merging the sought information into the inputs file.
+In a nutshell, this script will look for a csv file with rows having latitude, longitude, depth and specific dates. 
+It will also look for a configuration file - `setup.toml`- to find what products and variables you are after. Then 
+it will enquire Copernicus service for such details and generate a csv output of the exact same dimension as your input, 
+merging the sought information into the inputs file.
 
 The main advantages over the [toolbox's console client](https://help.marine.copernicus.eu/en/collections/5820990-command-line-interface-cli) are as follows:
 
