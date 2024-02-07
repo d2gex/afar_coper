@@ -89,7 +89,7 @@ input_filename = "api_parameters.csv" # name of the file holding the input param
 output_filename = "result.nc" # suffix added to the name of each individual file fetched per input row
 dataset_id = "cmems_mod_glo_phy_my_0.083deg_P1M-m" # data set identifier
 variables = ["thetao", "zos"] # variables wanting to be fetched
-years = [2012, 2020] #  date interval of interest
+years = [2012, 2020] #  date interval of interest. One single year can be defined as [2012]
 # distance method used to calculate the nearest point.
 # See alternatives on https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cdist.html
 distance = "euclidean"
