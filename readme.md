@@ -3,6 +3,7 @@
  - [2. Installation](#installation)
  - [3. Login to Copernicus](#login_to_copernicus)
  - [4. Running](#running)
+ - [5. Resuming the script at a specific point](#left_off)
 
 
 <a id="introduction"></a>
@@ -26,8 +27,8 @@ This wrapper uses solely the [subset](https://help.marine.copernicus.eu/en/artic
 <a id="installation"></a>
 # 2. Installation
 
-First, install **Python >=3.9 and < 3.12** as required by Copernicus Marine Toolbox and **pip**.  To do 
-so download the Python version of your choice from https://www.python.org/downloads/ and then follow the instructions 
+First, install **Python >=3.9 and < 3.12** as required by Copernicus Marine Toolbox and **pip** - please 
+do ensure you install **pip** too. To do  so download the Python version of your choice from https://www.python.org/downloads/ and then follow the instructions 
 on https://docs.python.org/3/using/index.html. Details for Windows, Mac and *nix users are provided in the appropriate sections.
 
 Second, download the source code from Github either by downloading the zip directly from the web on https://github.com/d2gex/copernicus-subset-wrapper.git as
@@ -44,7 +45,7 @@ shown in the figure below ...
 
 Third, install the project dependencies. If you do not want to install them system-wide, which is highly 
 recommended not do so, you can create a virtual environment as described on [Python Virtual Environments and Packages](https://docs.python.org/3/tutorial/venv.html).
-A quick tutorial for the virtual environment creation is shown below:
+A quick tutorial hack is shown below:
 
 ```bash
    python3 -m venv <<your_virtualenv_folder>>
@@ -63,11 +64,11 @@ The file **requirements.txt** contains all libraries that are necessary for this
 # 3. Loging to Copernicus
 If you have not yet registered with Copernicus you need first to do so [here](https://data.marine.copernicus.eu/register).
 Then you need to run the `login` function from Copernicus API one-off for your credentials to be generated. Subsequent calls
-to the wrapper will know where you credentials are stored and pick them as needed. To call login you need to run the following
+to the wrapper will know where your credentials are stored and pick them as needed. To call login you need to run the following
 on the console:
 
 ```bash
-  copernicus-marine login
+  copernicusmarine login
 ```
 You will be asked for the username and password you used earlier on in the registration process. Upon providing it, a message
 saying that the credentials have been generated and the location where they are should be prompted to you. You are now
@@ -121,4 +122,13 @@ although its name is down to you. In the example above it is called `ID_Gil`.
 After the data has been downloaded look for the resulting csv file in  '<<your_source_folder>>/**data**/<<dataset_identifier>>/**csv**/<<dataset_identifier>>.csv'.
 The wrapper will also place each downloaded `*.nc` files in '<<your_source_folder>>/**data**/<<dataset_identifier>>/**nc**/'.
 
+
+<a id="left_off"></a>
+# 5. Resuming at "left-off"
+
+Given that fetching data from Copernicus servers falls within the Big Data domain, dealing with large datasets does not come 
+without troubles. The natural unreliability of the internet connection you may be using plus the spatiotemporal inconvenient
+derived from constantly downloading data, may make the script to break at some point. In such case it is possible to resume 
+at a desired point by both reducing the original yearly interval one was after and setting the `start_mode = 2` in the setup.toml file.
+Beware that all files associated to the first year of the new reduced interval will be deleted entirely and re-downloaded again.
 
