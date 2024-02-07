@@ -49,7 +49,8 @@ A quick tutorial hack is shown below:
 
 ```bash
    python3 -m venv <<your_virtualenv_folder>>
-   source /path/to/your_virtualenv_folder/bin/activate
+   source /path/to/your_virtualenv_folder/bin/activate # (Linux-way)
+   \path\to\your_virtualenv_folder\Scripts\activate # (Windows-way)
 ```
 
 Lastly, all that is left now is to install all requirements at once as follows:
@@ -124,7 +125,7 @@ The wrapper will also place each downloaded `*.nc` files in '<<your_source_folde
 
 
 <a id="left_off"></a>
-# 5. Resuming at "left-off"
+# 5. Resuming the script at a specific point
 
 Given that fetching data from Copernicus servers falls within the Big Data domain, dealing with large datasets does not come 
 without troubles. The natural unreliability of the internet connection you may be using plus the spatiotemporal inconvenient
