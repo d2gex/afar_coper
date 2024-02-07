@@ -9,7 +9,12 @@
 <a id="introduction"></a>
 # 1. Introduction
 This is a wrapper to help you download data from [Copernicus servers](https://marine.copernicus.eu/register-copernicus-marine-service?mtm_campaign=Copernicus-Souscription&mtm_medium=cpc&mtm_source=google&mtm_content=text&mtm_cid=145762311002&mtm_kwd=copernicus%20marine%20data&gad_source=1&gclid=CjwKCAiAnL-sBhBnEiwAJRGigvyODuGJ__Aa1pjKNB8H7VvH_lrn3Fu-CJdZO1T_g-ChP95GC8fxFRoCLZsQAvD_BwE) via a configuration file, eliminating therefore the
-need to deal with programming. It has been developed in Python 3.9 and makes calls to the recently released [Copernicus Marine Toolbox's python API](https://help.marine.copernicus.eu/en/collections/5821001-python-library-api) - as per December 2023.
+needs to deal with programming. It has been developed in Python 3.9 and makes calls to the recently released [Copernicus Marine Toolbox's python API](https://help.marine.copernicus.eu/en/collections/5821001-python-library-api) - as per December 2023.
+
+In a nutshell, this script will look for a csv file with rows having latitude, longitude depth and the specific dates you 
+want each requested row to be downloaded at. It will also look for a configuration file - `setup.toml` file to find 
+what products and variables you are after. Then it will enquire Copernicus service for such details and generate a
+csv output of the exact same dimension as your input, merging the sought information into the inputs file.
 
 The main advantages over the [toolbox's console client](https://help.marine.copernicus.eu/en/collections/5820990-command-line-interface-cli) are as follows:
 
@@ -44,7 +49,7 @@ shown in the figure below ...
 ```
 
 Third, install the project dependencies. If you do not want to install them system-wide, which is highly 
-recommended not do so, you can create a virtual environment as described on [Python Virtual Environments and Packages](https://docs.python.org/3/tutorial/venv.html).
+recommended, you can create a virtual environment as described on [Python Virtual Environments and Packages](https://docs.python.org/3/tutorial/venv.html).
 A quick tutorial hack is shown below:
 
 ```bash
@@ -53,7 +58,7 @@ A quick tutorial hack is shown below:
    \path\to\your_virtualenv_folder\Scripts\activate # (Windows-way)
 ```
 
-Lastly, all that is left now is to install all requirements at once as follows:
+Otherwise you just can install the project requirements as:
 
 ```bash
    pip install -r /path/to/your_source_folder/requirements.txt
@@ -71,7 +76,7 @@ on the console:
 ```bash
   copernicusmarine login
 ```
-You will be asked for the username and password you used earlier on in the registration process. Upon providing it, a message
+You will be asked for the **username** and **password** you used earlier on in the registration process. Upon providing it, a message
 saying that the credentials have been generated and the location where they are should be prompted to you. You are now
 ready to use the wrapper without worrying in the future about credentials or whatsoever.
 
