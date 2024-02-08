@@ -17,17 +17,10 @@ if __name__ == "__main__":
     input_data = pd.read_csv(config.DATA_PATH / config.INPUT_FILENAME)
     input_data['time'] = pd.to_datetime(input_data['time'], format='%d/%m/%Y %H:%M')
 
-    try:
-        min_year = config.settings['years'][0]
-        max_year = config.settings['years'][-1]
-    except IndexError:
-        min_year = config.settings['years'][0]
-        max_year = min_year
-
     # (2) Split inputs into daily records
     csv_proc = CsvParameterSplitter(input_data,
-                                    min_year=min_year,
-                                    max_year=max_year,
+                                    min_year=config.settings['years'][0],
+                                    max_year=config.settings['years'][-1],
                                     time_offset=config.settings['time_offset'])
     api_params_by_dates = csv_proc.get_min_max_boundaries_per_dates()
     df_by_dates = csv_proc.get_dataframes_split_by_dates()
